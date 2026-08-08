@@ -3,6 +3,7 @@ import { Loader } from "@/components/site/loader";
 import { Hero } from "@/components/sections/hero";
 import { Philosophy, Craft, Journey, WhyUs } from "@/components/sections/story";
 import { ProductSection } from "@/components/sections/product";
+import { LabReportSection } from "@/components/sections/lab-report";
 import { Benefits, Reviews, RecipesSection, FaqSection } from "@/components/sections/closing";
 
 export const Route = createFileRoute("/")({
@@ -38,6 +39,7 @@ function Index() {
       <Journey />
       <WhyUs />
       <ProductSection />
+      <LabReportSection />
       <Benefits />
       <Reviews />
       <RecipesSection />

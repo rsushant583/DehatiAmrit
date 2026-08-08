@@ -22,15 +22,20 @@ const GALLERY = [
   { src: pourImg, alt: "Warm ghee poured from a brass spoon" },
 ];
 
-const SIZE_LABELS: Record<VariantId, string> = {
-  "200gm": "First Taste",
-  "500gm": "Daily Kitchen",
-  "1kg": "Family Jar",
-  "5kg": "Grand Feast"
+const SIZE_LABELS: Record<string, string> = {
+  "cow-200g": "First Taste",
+  "cow-500g": "Daily Kitchen",
+  "cow-1kg": "Family Jar",
+  "cow-5kg": "Grand Feast",
+  "buffalo-200g": "First Taste",
+  "buffalo-500g": "Daily Kitchen",
+  "buffalo-1kg": "Family Jar",
+  "buffalo-5kg": "Grand Feast",
 };
 
 export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void) => void }) {
-  const [variant, setVariant] = useState<VariantId>("1kg");
+  const [gheeType, setGheeType] = useState<"Cow" | "Buffalo">("Cow");
+  const [variant, setVariant] = useState<VariantId>("cow-1kg");
   const [qty, setQty] = useState(1);
   const [index, setIndex] = useState(0);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
@@ -209,9 +214,33 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
             </p>
 
             <div className="mt-8">
+              <span className="eyebrow text-forest-deep">Select ghee type</span>
+              <div className="mt-4 flex gap-3 p-1 bg-forest/5 rounded-full border border-forest/10 max-w-[280px]">
+                {(["Cow", "Buffalo"] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => {
+                      setGheeType(t);
+                      const currentSize = variant.split('-')[1];
+                      setVariant(`${t.toLowerCase()}-${currentSize}` as VariantId);
+                    }}
+                    className={cn(
+                      "flex-1 py-2 px-4 rounded-full text-[13px] font-medium tracking-[0.05em] uppercase transition-all duration-300",
+                      gheeType === t 
+                        ? "bg-white text-forest shadow-sm ring-1 ring-forest/20" 
+                        : "text-muted-foreground hover:text-forest-deep"
+                    )}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8">
               <span className="eyebrow text-forest-deep">Select your jar</span>
               <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-                {VARIANTS.map((opt) => {
+                {VARIANTS.filter(opt => opt.type === gheeType).map((opt) => {
                   const on = opt.id === variant;
                   return (
                     <button

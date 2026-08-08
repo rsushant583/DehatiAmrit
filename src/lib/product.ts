@@ -1,7 +1,11 @@
-export type VariantId = "200g" | "500g" | "1kg" | "5kg";
+export type VariantId = 
+  | "cow-200g" | "cow-500g" | "cow-1kg" | "cow-5kg"
+  | "buffalo-200g" | "buffalo-500g" | "buffalo-1kg" | "buffalo-5kg"
+  | "200g" | "500g" | "1kg" | "5kg";
 
 export type Variant = {
   id: VariantId;
+  type: "Cow" | "Buffalo";
   label: string;
   weight: string;
   mrp: number;
@@ -10,13 +14,23 @@ export type Variant = {
 };
 
 export const VARIANTS: Variant[] = [
-  { id: "200g", label: "200 gm", weight: "200 gm", mrp: 499, price: 349, note: "First taste" },
-  { id: "500g", label: "500 gm", weight: "500 gm", mrp: 1199, price: 849, note: "Everyday jar" },
-  { id: "1kg", label: "1 Kg", weight: "1 Kg", mrp: 2199, price: 1599, note: "Most loved" },
-  { id: "5kg", label: "5 Kg", weight: "5 Kg", mrp: 4000, price: 3099, note: "Family tin" },
+  { id: "cow-200g", type: "Cow", label: "200 gm", weight: "200 gm", mrp: 599, price: 399, note: "First taste" },
+  { id: "cow-500g", type: "Cow", label: "500 gm", weight: "500 gm", mrp: 1250, price: 999, note: "Everyday jar" },
+  { id: "cow-1kg", type: "Cow", label: "1 Kg", weight: "1 Kg", mrp: 2599, price: 1890, note: "Most loved" },
+  { id: "cow-5kg", type: "Cow", label: "5 Kg", weight: "5 Kg", mrp: 11990, price: 8990, note: "Family tin" },
+  { id: "buffalo-200g", type: "Buffalo", label: "200 gm", weight: "200 gm", mrp: 499, price: 349, note: "First taste" },
+  { id: "buffalo-500g", type: "Buffalo", label: "500 gm", weight: "500 gm", mrp: 1199, price: 849, note: "Everyday jar" },
+  { id: "buffalo-1kg", type: "Buffalo", label: "1 Kg", weight: "1 Kg", mrp: 2199, price: 1599, note: "Most loved" },
+  { id: "buffalo-5kg", type: "Buffalo", label: "5 Kg", weight: "5 Kg", mrp: 11000, price: 8099, note: "Family tin" },
 ];
 
-export const getVariant = (id: VariantId) => VARIANTS.find((v) => v.id === id) ?? VARIANTS[2]!;
+export const getVariant = (id: VariantId) => {
+  if (id === "200g") return VARIANTS.find(v => v.id === "cow-200g")!;
+  if (id === "500g") return VARIANTS.find(v => v.id === "cow-500g")!;
+  if (id === "1kg") return VARIANTS.find(v => v.id === "cow-1kg")!;
+  if (id === "5kg") return VARIANTS.find(v => v.id === "cow-5kg")!;
+  return VARIANTS.find((v) => v.id === id) ?? VARIANTS.find(v => v.id === "cow-1kg")!;
+};
 
 export const savings = (v: Variant) => v.mrp - v.price;
 export const savingsPct = (v: Variant) => Math.round(((v.mrp - v.price) / v.mrp) * 100);
