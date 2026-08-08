@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Leaf, RotateCw, Flame, ShieldCheck, Award } from "lucide-react";
+import { Leaf, RotateCw, Flame, ShieldCheck, Award, Sun, Milk, MoonStar, Hand, TreePine, Wheat, Package, Home } from "lucide-react";
 import { Reveal, RevealLines, useScrollProgress } from "@/components/site/reveal";
 import villageImg from "@/assets/village.jpg";
 import craftImg from "@/assets/craft-churn.jpg";
@@ -17,10 +17,10 @@ export function Philosophy() {
   }, []);
 
   return (
-    <section id="story" className="relative bg-cream py-32 md:py-48 overflow-hidden flex flex-col items-center justify-center text-center">
+    <section id="story" className="relative bg-cream py-16 md:py-24 overflow-hidden flex flex-col items-center justify-center text-center">
       <div className="mx-auto max-w-[1200px] px-5 md:px-10 w-full">
         <div 
-          className="transition-all duration-[2000ms] ease-out mb-24 md:mb-32"
+          className="transition-all duration-[2000ms] ease-out mb-12 md:mb-16"
           style={{ opacity: ready ? 1 : 0, transform: ready ? 'translateY(0)' : 'translateY(40px)' }}
         >
           <h2 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.1] text-forest-deep">
@@ -98,11 +98,11 @@ const PROMISES = [
 
 export function Craft() {
   return (
-    <section id="craft" className="relative bg-cream py-32 md:py-48">
+    <section id="craft" className="relative bg-cream py-16 md:py-24">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-20 md:mb-28">
+        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <span className="eyebrow tracking-[0.2em] text-gold uppercase mb-8 block font-medium">
             02 — Our Promise
           </span>
@@ -145,31 +145,71 @@ export function Craft() {
 /* ————————————————————— Journey ————————————————————— */
 
 const STEPS = [
-  "Open Fields",
-  "Morning Milking",
-  "Fresh A2 Milk",
-  "Curd Overnight",
-  "Hand Bilona",
-  "Slow Wood Fire",
-  "Natural Grain",
-  "Glass Jar",
-  "Your Kitchen"
+  { label: "Open Fields", icon: Sun, hint: "Where it begins" },
+  { label: "Morning Milking", icon: Milk, hint: "Fresh at dawn" },
+  { label: "Fresh A2 Milk", icon: Leaf, hint: "Pure & natural" },
+  { label: "Curd Overnight", icon: MoonStar, hint: "Slow culture" },
+  { label: "Hand Bilona", icon: Hand, hint: "Ancient method" },
+  { label: "Slow Wood Fire", icon: Flame, hint: "Patient simmer" },
+  { label: "Natural Grain", icon: Wheat, hint: "Golden texture" },
+  { label: "Glass Jar", icon: Package, hint: "Sealed fresh" },
+  { label: "Your Kitchen", icon: Home, hint: "Ready to serve" }
 ];
 
 export function Journey() {
   return (
-    <section className="relative bg-forest-deep text-cream py-32 md:py-48 overflow-hidden">
-      <div className="mx-auto max-w-4xl px-5 md:px-10 text-center">
-        <div className="mb-24">
-          <span className="eyebrow text-gold">03 — The Journey</span>
+    <section className="relative bg-forest-deep text-cream py-16 md:py-24 overflow-hidden">
+      {/* Subtle radial gold glow */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 80%, rgba(200,160,60,0.08) 0%, transparent 60%)' }} />
+      
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative z-10">
+        <div className="text-center mb-12 md:mb-16">
+          <span className="eyebrow text-gold tracking-[0.3em]">03 — The Journey</span>
+          <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] text-cream leading-tight">From Pasture to Your Plate</h2>
+          <p className="mt-3 text-cream/50 text-sm tracking-wide">9 steps · 48 hours · One tradition</p>
         </div>
-        <div className="flex flex-col items-center gap-16 md:gap-24 relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gold/20 -translate-x-1/2"></div>
-          
+
+        {/* Desktop: Horizontal scrollable timeline */}
+        <div className="hidden md:block overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
+          <div className="flex items-start gap-0 min-w-max mx-auto justify-center">
+            {STEPS.map((step, i) => (
+              <div key={step.label} className="flex items-start">
+                {/* Step node */}
+                <div className="group flex flex-col items-center w-[130px] cursor-default">
+                  {/* Icon circle */}
+                  <div className="relative w-14 h-14 rounded-full border border-gold/30 bg-forest-deep flex items-center justify-center transition-all duration-700 group-hover:border-gold group-hover:bg-gold/10 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-gold/20">
+                    <step.icon className="w-5 h-5 text-gold/70 transition-colors duration-500 group-hover:text-gold" strokeWidth={1.5} />
+                  </div>
+                  {/* Step number */}
+                  <span className="mt-3 text-[10px] tracking-[0.25em] text-gold/40 font-medium uppercase">Step {String(i + 1).padStart(2, '0')}</span>
+                  {/* Step label */}
+                  <span className="mt-1.5 font-display text-[15px] text-cream/90 text-center leading-tight transition-colors duration-500 group-hover:text-gold">{step.label}</span>
+                  {/* Hint */}
+                  <span className="mt-1 text-[11px] text-cream/30 transition-colors duration-500 group-hover:text-cream/60">{step.hint}</span>
+                </div>
+                {/* Connector line */}
+                {i < STEPS.length - 1 && (
+                  <div className="flex items-center mt-7 -mx-1">
+                    <div className="w-8 h-px bg-gradient-to-r from-gold/40 to-gold/20" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-gold/30 shrink-0" />
+                    <div className="w-8 h-px bg-gradient-to-r from-gold/20 to-gold/40" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: 3-column compact grid */}
+        <div className="md:hidden grid grid-cols-3 gap-6">
           {STEPS.map((step, i) => (
-            <Reveal key={step} variant="fade" delay={100} className="relative z-10 bg-forest-deep py-4 px-8 rounded-full border border-gold/30">
-              <span className="font-display text-2xl md:text-4xl text-cream tracking-wide">{step}</span>
-            </Reveal>
+            <div key={step.label} className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full border border-gold/25 bg-forest-deep/80 flex items-center justify-center">
+                <step.icon className="w-4 h-4 text-gold/70" strokeWidth={1.5} />
+              </div>
+              <span className="mt-2 text-[10px] tracking-[0.2em] text-gold/40">{String(i + 1).padStart(2, '0')}</span>
+              <span className="mt-1 font-display text-[13px] text-cream/90 leading-tight">{step.label}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -190,9 +230,9 @@ const REASONS = [
 
 export function WhyUs() {
   return (
-    <section className="bg-cream py-32 md:py-48">
+    <section className="bg-cream py-16 md:py-24">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        <div className="mb-20 text-center">
+        <div className="mb-12 text-center">
           <span className="eyebrow text-gold mb-6 block">04 — Why Dehati Amrit</span>
           <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] text-forest-deep">The Standard of Purity</h2>
         </div>

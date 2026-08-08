@@ -76,17 +76,17 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
   const steamY = useTransform(scrollYProgress, [0, 1], [20, -40]);
 
   return (
-    <section id="product" className="relative bg-paper py-24 md:py-36">
+    <section id="product" className="relative bg-paper py-16 md:py-24">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-14 flex items-baseline justify-between border-b border-line pb-4">
           <span className="eyebrow">05 — The ghee</span>
           <span className="font-deva text-sm text-muted-foreground">एक ही उत्पाद, चार आकार</span>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24" ref={sectionRef}>
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16" ref={sectionRef}>
           {/* Gallery */}
           <div className="relative group perspective-[1000px]">
-            <Reveal variant="image" className="relative aspect-[4/5] w-full rounded-2xl bg-cream shadow-2xl overflow-hidden transition-all duration-700 hover:shadow-3xl">
+            <Reveal variant="image" className="relative aspect-[3/4] w-full rounded-2xl bg-cream shadow-2xl overflow-hidden transition-all duration-700 hover:shadow-3xl">
               {/* Dynamic Scrolling Light/Reflection */}
               <motion.div 
                 className="absolute inset-0 pointer-events-none z-10 mix-blend-overlay opacity-60"
@@ -197,7 +197,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
               </span>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-baseline gap-4">
+            <div className="mt-6 flex flex-wrap items-baseline gap-4">
               <span className="font-display text-5xl text-forest-deep">{inr(v.price)}</span>
               <span className="text-xl text-muted-foreground line-through">{inr(v.mrp)}</span>
               <span className="rounded-full bg-forest/5 px-3 py-1.5 text-[12px] font-medium tracking-[0.16em] text-forest uppercase">
@@ -208,9 +208,9 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
               Inclusive of all taxes · Complimentary shipping across India
             </p>
 
-            <div className="mt-12">
+            <div className="mt-8">
               <span className="eyebrow text-forest-deep">Select your jar</span>
-              <div className="mt-5 grid grid-cols-2 gap-4">
+              <div className="mt-4 grid grid-cols-2 gap-3">
                 {VARIANTS.map((opt) => {
                   const on = opt.id === variant;
                   return (
@@ -219,7 +219,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                       onClick={() => setVariant(opt.id)}
                       aria-pressed={on}
                       className={cn(
-                        "group relative overflow-hidden rounded-xl border p-5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm",
+                        "group relative overflow-hidden rounded-xl border p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm",
                         on ? "border-forest bg-forest/5 shadow-md scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
                       )}
                     >
@@ -239,17 +239,17 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
               </div>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-6">
+            <div className="mt-6 flex flex-wrap items-center gap-6">
               <QtyStepper large value={qty} onChange={(q) => setQty(Math.max(1, Math.min(q, 20)))} label="Quantity" />
               <span className="text-base text-muted-foreground">
                 Subtotal: <span className="font-medium text-forest-deep">{inr(v.price * qty)}</span>
               </span>
             </div>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <button
                 onClick={addToCart}
-                className="group relative h-16 overflow-hidden rounded-full border-2 border-forest text-[14px] font-medium tracking-[0.16em] text-forest-deep uppercase transition-transform hover:scale-[1.02] duration-300"
+                className="group relative h-14 overflow-hidden rounded-full border-2 border-forest text-[14px] font-medium tracking-[0.16em] text-forest-deep uppercase transition-transform hover:scale-[1.02] duration-300"
               >
                 <span className="relative z-10 transition-colors duration-[600ms] group-hover:text-primary-foreground">
                   Add to bag
@@ -258,14 +258,14 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
               </button>
               <button
                 onClick={buyNow}
-                className="group relative h-16 overflow-hidden rounded-full bg-forest text-[14px] font-medium tracking-[0.16em] text-primary-foreground uppercase shadow-lg shadow-forest/30 transition-transform hover:scale-[1.02] hover:shadow-xl duration-300"
+                className="group relative h-14 overflow-hidden rounded-full bg-forest text-[14px] font-medium tracking-[0.16em] text-primary-foreground uppercase shadow-lg shadow-forest/30 transition-transform hover:scale-[1.02] hover:shadow-xl duration-300"
               >
                 <span className="relative z-10">Buy now</span>
                 <span className="absolute inset-0 origin-bottom scale-y-0 bg-forest-deep transition-transform duration-[700ms] [transition-timing-function:var(--ease-silk)] group-hover:scale-y-100" />
               </button>
             </div>
 
-            <ul className="mt-12 space-y-4 border-t border-line pt-8">
+            <ul className="mt-8 space-y-3 border-t border-line pt-6">
               {[
                 "Traditional Vedic Bilona method",
                 "Milk from free-grazing indigenous cows",
@@ -301,7 +301,7 @@ function ProductDetails() {
   ];
 
   return (
-    <div className="mx-auto mt-28 max-w-[1400px] px-5 md:mt-40 md:px-10">
+    <div className="mx-auto mt-16 max-w-[1400px] px-5 md:mt-24 md:px-10">
       <div className="mb-12 flex items-baseline justify-between border-b border-line pb-4">
         <span className="eyebrow">06 — Uncompromising Quality</span>
         <span className="text-[11px] tracking-[0.22em] text-muted-foreground uppercase">FSSAI Certified</span>
