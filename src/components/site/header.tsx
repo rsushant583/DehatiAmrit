@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Search, ShoppingBag, X, Home, Heart, User } from "lucide-react";
+import { Menu, Search, ShoppingBag, ShoppingCart, X, Home, Heart, User } from "lucide-react";
+import { toast } from "sonner";
 import logoUrl from "@/assets/logo-transparent.png";
 import { useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,7 @@ export function SiteHeader() {
   const lastScrollY = useRef(0);
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState(false);
-  const { count, setOpen } = useCart();
+  const { count, setOpen, wishlist } = useCart();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const onHome = path === "/";
 
@@ -135,6 +136,13 @@ export function SiteHeader() {
             <button
               type="button"
               aria-label="Wishlist"
+              onClick={() => {
+                if (wishlist.length > 0) {
+                  toast(`You have ${wishlist.length} item(s) in your wishlist.`);
+                } else {
+                  toast("Your wishlist is empty. Tap the heart on a product to save it!");
+                }
+              }}
               className="hidden sm:grid h-[44px] w-[44px] place-items-center rounded-full text-forest-deep transition-colors duration-500 hover:bg-secondary/50"
             >
               <Heart className="h-[20px] w-[20px]" strokeWidth={1.4} />
@@ -237,9 +245,14 @@ export function SiteHeader() {
             <Search className="w-[22px] h-[22px]" strokeWidth={1.5} />
             <span className="text-[9px] font-medium tracking-wide">Search</span>
           </button>
-          <button className="flex flex-col items-center gap-1.5 p-2 w-[44px] text-forest-deep hover:text-forest transition-colors active:scale-95">
-            <Heart className="w-[22px] h-[22px]" strokeWidth={1.5} />
-            <span className="text-[9px] font-medium tracking-wide">Wishlist</span>
+          <button onClick={() => setOpen(true)} className="flex flex-col items-center gap-1.5 p-2 w-[44px] text-forest-deep hover:text-forest transition-colors active:scale-95 relative">
+            <ShoppingCart className="w-[22px] h-[22px]" strokeWidth={1.5} />
+            {count > 0 && (
+              <span className="absolute right-0 top-1 grid h-3 min-w-[12px] place-items-center rounded-full bg-gold px-1 text-[8px] font-semibold text-forest-deep">
+                {count}
+              </span>
+            )}
+            <span className="text-[9px] font-medium tracking-wide whitespace-nowrap">My Cart</span>
           </button>
           <button className="flex flex-col items-center gap-1.5 p-2 w-[44px] text-forest-deep hover:text-forest transition-colors active:scale-95">
             <User className="w-[22px] h-[22px]" strokeWidth={1.5} />

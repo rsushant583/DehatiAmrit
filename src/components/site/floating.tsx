@@ -42,7 +42,7 @@ export function FloatingActions() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-[80] flex flex-col items-end gap-3">
+    <div className="pointer-events-none fixed bottom-24 lg:bottom-5 right-5 z-[80] flex flex-col items-end gap-3">
       <button
         type="button"
         aria-label="Back to top"

@@ -55,7 +55,7 @@ function CheckoutPage() {
   const cod = pay === "cod" ? 49 : 0;
   const payable = total + cod;
 
-  const set = (k: keyof typeof form) => (v: string) => setForm({ ...form, [k]: v });
+  const set = (k: keyof typeof form) => (v: string) => setForm(prev => ({ ...prev, [k]: v }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
