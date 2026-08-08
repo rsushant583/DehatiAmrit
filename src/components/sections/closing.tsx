@@ -208,7 +208,7 @@ export function RecipesSection() {
           <span className="font-deva text-xl text-clay">हर चम्मच में स्वाद</span>
         </div>
 
-        <div className="mt-20 grid gap-10 sm:grid-cols-2 lg:grid-cols-3 md:gap-x-8 md:gap-y-16">
+        <div className="mt-12 md:mt-20 grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-10 md:gap-x-8 md:gap-y-16">
           {EVERYDAY_RECIPES.map((r, i) => (
             <Reveal
               variant="fade"
@@ -226,14 +226,14 @@ export function RecipesSection() {
                   className="aspect-[4/5] w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
                 />
               </div>
-              <div className="mt-8">
-                <div className="flex items-center justify-between border-b border-line pb-4">
-                  <h3 className="font-display text-2xl text-forest-deep group-hover:text-forest transition-colors">{r.title}</h3>
-                  <span className="rounded-full bg-forest/5 px-3 py-1 text-[11px] font-medium tracking-[0.2em] text-forest uppercase">
+              <div className="mt-4 md:mt-8">
+                <div className="flex flex-col xl:flex-row xl:items-center justify-between border-b border-line pb-3 md:pb-4 gap-2">
+                  <h3 className="font-display text-[1rem] md:text-2xl text-forest-deep group-hover:text-forest transition-colors leading-tight">{r.title}</h3>
+                  <span className="self-start xl:self-auto rounded-full bg-forest/5 px-2 md:px-3 py-0.5 md:py-1 text-[9px] md:text-[11px] font-medium tracking-[0.2em] text-forest uppercase">
                     {r.time}
                   </span>
                 </div>
-                <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
+                <p className="mt-3 md:mt-4 text-[12px] md:text-[15px] leading-relaxed text-muted-foreground line-clamp-3 md:line-clamp-none">
                   {r.line}
                 </p>
               </div>

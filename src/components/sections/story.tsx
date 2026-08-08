@@ -118,18 +118,18 @@ export function Craft() {
         </div>
 
         {/* Feature Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {PROMISES.map((item, i) => (
             <Reveal key={item.title} variant="fade" delay={200 + i * 150} className="group">
-              <div className="h-full bg-paper p-10 lg:p-12 border border-line hover:border-gold/30 rounded-[2rem] transition-all duration-700 flex flex-col items-start shadow-sm hover:shadow-2xl hover:shadow-gold/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-bl-[100px] transition-transform duration-700 group-hover:scale-125" />
-                <div className="relative w-16 h-16 rounded-full bg-forest-deep/5 flex items-center justify-center mb-8 group-hover:bg-gold/10 transition-colors duration-700">
-                  <item.icon className="w-7 h-7 text-forest-deep group-hover:text-gold transition-colors duration-700" strokeWidth={1.2} />
+              <div className="h-full bg-paper p-5 lg:p-12 border border-line hover:border-gold/30 rounded-[1.5rem] lg:rounded-[2rem] transition-all duration-700 flex flex-col items-start shadow-sm hover:shadow-2xl hover:shadow-gold/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-gold/5 rounded-bl-[100px] transition-transform duration-700 group-hover:scale-125" />
+                <div className="relative w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-forest-deep/5 flex items-center justify-center mb-6 lg:mb-8 group-hover:bg-gold/10 transition-colors duration-700">
+                  <item.icon className="w-5 h-5 lg:w-7 lg:h-7 text-forest-deep group-hover:text-gold transition-colors duration-700" strokeWidth={1.2} />
                 </div>
-                <h3 className="relative font-deva text-[1.6rem] text-forest-deep mb-4 group-hover:text-forest transition-colors duration-500">
+                <h3 className="relative font-deva text-[1.1rem] lg:text-[1.6rem] leading-tight text-forest-deep mb-3 lg:mb-4 group-hover:text-forest transition-colors duration-500">
                   {item.title}
                 </h3>
-                <p className="relative font-deva text-[1.1rem] leading-relaxed text-clay">
+                <p className="relative font-deva text-[0.9rem] lg:text-[1.1rem] leading-relaxed text-clay">
                   {item.desc}
                 </p>
               </div>
