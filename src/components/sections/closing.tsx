@@ -27,7 +27,7 @@ export function Benefits() {
   const { ref, progress } = useScrollProgress<HTMLDivElement>();
   
   return (
-    <section className="relative overflow-hidden bg-cream py-16 md:py-24">
+    <section className="relative overflow-hidden bg-cream py-12 md:py-16">
       <div ref={ref} className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-start">
           <div>
@@ -101,7 +101,7 @@ export function Reviews() {
   const r = REVIEWS[i]!;
 
   return (
-    <section className="bg-forest text-primary-foreground py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-forest text-primary-foreground py-12 md:py-16 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%)' }} />
       
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative z-10">
@@ -195,7 +195,7 @@ const EVERYDAY_RECIPES = [
 
 export function RecipesSection() {
   return (
-    <section id="recipes" className="bg-paper py-16 md:py-24">
+    <section id="recipes" className="bg-paper py-12 md:py-16">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between border-b border-line pb-6 gap-6">
           <div>
@@ -280,7 +280,7 @@ export function FaqSection() {
   };
 
   return (
-    <section id="faq" className="bg-cream py-16 md:py-24">
+    <section id="faq" className="bg-cream py-12 md:py-16">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         
 

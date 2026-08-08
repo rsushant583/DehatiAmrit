@@ -76,7 +76,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
   const steamY = useTransform(scrollYProgress, [0, 1], [20, -40]);
 
   return (
-    <section id="product" className="relative bg-paper py-16 md:py-24">
+    <section id="product" className="relative bg-paper py-12 md:py-16">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="mb-14 flex items-baseline justify-between border-b border-line pb-4">
           <span className="eyebrow">05 — The ghee</span>

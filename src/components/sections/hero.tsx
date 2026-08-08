@@ -70,13 +70,6 @@ export function Hero({ onBuy }: { onBuy: () => void }) {
               />
             </div>
           </Reveal>
-          
-          {/* Vertical text element */}
-          <div className="absolute left-0 bottom-10 -rotate-90 origin-bottom-left hidden lg:block pointer-events-none">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-forest-deep/40">
-              BATCH NO. 07 — SMALL BATCH
-            </span>
-          </div>
         </div>
       </div>
 

@@ -17,10 +17,10 @@ export function Philosophy() {
   }, []);
 
   return (
-    <section id="story" className="relative bg-cream py-16 md:py-24 overflow-hidden flex flex-col items-center justify-center text-center">
+    <section id="story" className="relative bg-cream py-12 md:py-16 overflow-hidden flex flex-col items-center justify-center text-center">
       <div className="mx-auto max-w-[1200px] px-5 md:px-10 w-full">
         <div 
-          className="transition-all duration-[2000ms] ease-out mb-12 md:mb-16"
+          className="transition-all duration-[2000ms] ease-out mb-8 md:mb-12"
           style={{ opacity: ready ? 1 : 0, transform: ready ? 'translateY(0)' : 'translateY(40px)' }}
         >
           <h2 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.1] text-forest-deep">
@@ -98,11 +98,11 @@ const PROMISES = [
 
 export function Craft() {
   return (
-    <section id="craft" className="relative bg-cream py-16 md:py-24">
+    <section id="craft" className="relative bg-cream py-12 md:py-16">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-12">
           <span className="eyebrow tracking-[0.2em] text-gold uppercase mb-8 block font-medium">
             02 — Our Promise
           </span>
@@ -158,12 +158,12 @@ const STEPS = [
 
 export function Journey() {
   return (
-    <section className="relative bg-forest-deep text-cream py-16 md:py-24 overflow-hidden">
+    <section className="relative bg-forest-deep text-cream py-12 md:py-16 overflow-hidden">
       {/* Subtle radial gold glow */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 80%, rgba(200,160,60,0.08) 0%, transparent 60%)' }} />
       
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative z-10">
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-8 md:mb-12">
           <span className="eyebrow text-gold tracking-[0.3em]">03 — The Journey</span>
           <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] text-cream leading-tight">From Pasture to Your Plate</h2>
           <p className="mt-3 text-cream/50 text-sm tracking-wide">9 steps · 48 hours · One tradition</p>
@@ -230,9 +230,9 @@ const REASONS = [
 
 export function WhyUs() {
   return (
-    <section className="bg-cream py-16 md:py-24">
+    <section className="bg-cream py-12 md:py-16">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        <div className="mb-12 text-center">
+        <div className="mb-10 text-center">
           <span className="eyebrow text-gold mb-6 block">04 — Why Dehati Amrit</span>
           <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] text-forest-deep">The Standard of Purity</h2>
         </div>
