@@ -395,7 +395,7 @@ export function Field({
     "aria-invalid": !!error,
     "aria-describedby": error ? `${id}-error` : undefined,
     className:
-      "peer w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40 transition-colors",
+      "w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40 transition-colors",
   };
 
   return (
@@ -411,7 +411,7 @@ export function Field({
         )}
         <span className="block h-[2px] w-full bg-line/80 rounded-full" />
         <span
-          className="absolute bottom-0 left-0 h-[2px] w-full origin-left bg-forest rounded-full transition-transform duration-[600ms] ease-out scale-x-0 peer-focus:scale-x-100"
+          className="absolute bottom-0 left-0 h-[2px] w-full origin-left bg-forest rounded-full transition-transform duration-[600ms] ease-out scale-x-0 group-focus-within:scale-x-100"
         />
       </div>
       {error && (
