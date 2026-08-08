@@ -405,9 +405,9 @@ export function Field({
       </label>
       <div className="relative mt-2 group">
         {textarea ? (
-          <textarea {...shared} rows={4} className={shared.className + " resize-none"} placeholder="How can we help you?" />
+          <textarea {...shared} rows={4} className={shared.className + " resize-none"} placeholder="How can we help you?" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore="true" />
         ) : (
-          <input {...shared} type={type} autoComplete={autoComplete} placeholder={type === 'email' ? 'you@example.com' : 'John Doe'} />
+          <input {...shared} type={type} autoComplete={autoComplete} placeholder={type === 'email' ? 'you@example.com' : 'John Doe'} data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore="true" />
         )}
         <span className="block h-[2px] w-full bg-line/80 rounded-full" />
         <span

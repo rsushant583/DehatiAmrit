@@ -116,7 +116,6 @@
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    overflow-x: hidden;
   }
 
   body {
@@ -124,7 +123,6 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
-    overflow-x: hidden;
   }
 
   ::selection {
