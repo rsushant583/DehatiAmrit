@@ -131,12 +131,14 @@ function RootComponent() {
       <CartProvider>
         <SmoothScroll />
         <ScrollProgress />
-        <SiteHeader />
-        <main id="main">
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </main>
-        <SiteFooter />
+        <div className="overflow-x-hidden w-full flex flex-col min-h-screen relative">
+          <SiteHeader />
+          <main id="main" className="flex-1 w-full">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
         <CartDrawer />
         <FloatingActions />
         <Toaster position="bottom-left" />

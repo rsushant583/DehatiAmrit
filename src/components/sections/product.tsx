@@ -155,7 +155,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
               </button>
             </Reveal>
 
-            <div className="mt-6 flex justify-center gap-4">
+            <div className="mt-4 sm:mt-6 flex justify-center gap-2 sm:gap-4">
               {GALLERY.map((g, i) => (
                 <button
                   key={g.src}
@@ -163,7 +163,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                   aria-label={`View image ${i + 1}`}
                   aria-current={index === i}
                   className={cn(
-                    "aspect-square w-20 overflow-hidden rounded-md transition-all duration-500 outline outline-2 outline-offset-2",
+                    "aspect-square w-16 sm:w-20 overflow-hidden rounded-md transition-all duration-500 outline outline-2 outline-offset-2 shrink-0",
                     index === i ? "opacity-100 outline-forest shadow-md" : "opacity-60 outline-transparent hover:opacity-100",
                   )}
                 >
@@ -219,18 +219,18 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                       onClick={() => setVariant(opt.id)}
                       aria-pressed={on}
                       className={cn(
-                        "group relative overflow-hidden rounded-xl border p-2.5 sm:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center",
+                        "group relative overflow-hidden rounded-xl border p-2.5 sm:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center min-w-0",
                         on ? "border-forest bg-forest/5 shadow-md scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
                       )}
                     >
-                      <span className="relative flex justify-between items-start sm:items-center w-full">
-                        <span className="block text-[13px] sm:text-[16px] font-medium text-forest-deep leading-tight">{SIZE_LABELS[opt.id] || opt.label}</span>
+                      <span className="relative flex justify-between items-start sm:items-center w-full gap-1">
+                        <span className="block text-[13px] sm:text-[16px] font-medium text-forest-deep leading-tight truncate">{SIZE_LABELS[opt.id] || opt.label}</span>
                         {on && <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-forest shrink-0 mt-0.5 sm:mt-0" />}
                       </span>
-                      <span className="relative mt-1 block text-[11px] sm:text-sm text-muted-foreground leading-tight">
+                      <span className="relative mt-1 block text-[11px] sm:text-sm text-muted-foreground leading-tight truncate">
                         {opt.label} • {inr(opt.price)}
                       </span>
-                      <span className="relative mt-2 sm:mt-3 block text-[9px] sm:text-[11px] font-medium tracking-[0.15em] sm:tracking-[0.18em] text-clay uppercase">
+                      <span className="relative mt-2 sm:mt-3 block text-[9px] sm:text-[11px] font-medium tracking-[0.15em] sm:tracking-[0.18em] text-clay uppercase truncate">
                         {opt.note}
                       </span>
                     </button>
