@@ -187,7 +187,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
           <div className="lg:sticky lg:top-28 lg:self-start">
             <RevealLines
               lines={["Dehati Amrit", "Premium Ghee"]}
-              className="font-display text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.05] text-forest-deep"
+              className="font-display text-[clamp(2rem,6vw,3.8rem)] leading-[1.05] text-forest-deep"
             />
             <div className="mt-4 flex items-center gap-3">
               <p className="font-deva text-lg text-clay">देहाती अमृत घी</p>
@@ -197,20 +197,20 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
               </span>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-baseline gap-4">
-              <span className="font-display text-5xl text-forest-deep">{inr(v.price)}</span>
-              <span className="text-xl text-muted-foreground line-through">{inr(v.mrp)}</span>
-              <span className="rounded-full bg-forest/5 px-3 py-1.5 text-[12px] font-medium tracking-[0.16em] text-forest uppercase">
+            <div className="mt-6 flex flex-wrap items-baseline gap-3 md:gap-4">
+              <span className="font-display text-4xl md:text-5xl text-forest-deep">{inr(v.price)}</span>
+              <span className="text-lg md:text-xl text-muted-foreground line-through">{inr(v.mrp)}</span>
+              <span className="rounded-full bg-forest/5 px-3 py-1 md:py-1.5 text-[11px] md:text-[12px] font-medium tracking-[0.16em] text-forest uppercase mt-1 md:mt-0">
                 Save {inr(savings(v))} · {savingsPct(v)}%
               </span>
             </div>
-            <p className="mt-3 text-sm text-muted-foreground">
+            <p className="mt-4 text-[13px] md:text-sm leading-relaxed text-muted-foreground">
               Inclusive of all taxes · Complimentary shipping across India
             </p>
 
             <div className="mt-8">
               <span className="eyebrow text-forest-deep">Select your jar</span>
-              <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 {VARIANTS.map((opt) => {
                   const on = opt.id === variant;
                   return (
@@ -219,18 +219,18 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                       onClick={() => setVariant(opt.id)}
                       aria-pressed={on}
                       className={cn(
-                        "group relative overflow-hidden rounded-xl border p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm",
-                        on ? "border-forest bg-forest/5 shadow-md scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
+                        "group relative overflow-hidden rounded-xl border p-4 md:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center",
+                        on ? "border-forest bg-forest/5 shadow-md scale-[1.02] md:scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
                       )}
                     >
-                      <span className="relative flex justify-between items-start">
-                        <span className="block text-[16px] font-medium text-forest-deep">{SIZE_LABELS[opt.id] || opt.label}</span>
-                        {on && <Check className="h-4 w-4 text-forest" />}
+                      <span className="relative flex justify-between items-center w-full">
+                        <span className="block text-[15px] md:text-[16px] font-medium text-forest-deep">{SIZE_LABELS[opt.id] || opt.label}</span>
+                        {on && <Check className="h-4 w-4 text-forest shrink-0" />}
                       </span>
-                      <span className="relative mt-1 block text-sm text-muted-foreground">
+                      <span className="relative mt-1 block text-[13px] md:text-sm text-muted-foreground">
                         {opt.label} • {inr(opt.price)}
                       </span>
-                      <span className="relative mt-3 block text-[11px] font-medium tracking-[0.18em] text-clay uppercase">
+                      <span className="relative mt-2 md:mt-3 block text-[10px] md:text-[11px] font-medium tracking-[0.18em] text-clay uppercase">
                         {opt.note}
                       </span>
                     </button>
