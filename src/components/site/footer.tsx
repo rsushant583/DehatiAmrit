@@ -73,10 +73,12 @@ export function SiteFooter() {
               </a>
             </div>
             
-            <div className="border-t border-primary-foreground/10 pt-8 mt-4 flex flex-col gap-4 text-center">
-              <Link to="/policy" className="text-[13px] text-primary-foreground/50 hover:text-white uppercase tracking-widest py-2">Privacy Policy</Link>
-              <Link to="/terms" className="text-[13px] text-primary-foreground/50 hover:text-white uppercase tracking-widest py-2">Terms of Service</Link>
-              <Link to="/refund" className="text-[13px] text-primary-foreground/50 hover:text-white uppercase tracking-widest py-2">Refund Policy</Link>
+            <div className="border-t border-primary-foreground/10 pt-6 mt-4 flex flex-wrap items-center justify-center gap-6">
+              <Link to="/policy" className="text-[13px] text-primary-foreground/50 hover:text-white uppercase tracking-widest py-1 transition-colors">Privacy Policy</Link>
+              <span className="text-primary-foreground/20">·</span>
+              <Link to="/terms" className="text-[13px] text-primary-foreground/50 hover:text-white uppercase tracking-widest py-1 transition-colors">Terms of Service</Link>
+              <span className="text-primary-foreground/20">·</span>
+              <Link to="/refund" className="text-[13px] text-primary-foreground/50 hover:text-white uppercase tracking-widest py-1 transition-colors">Refund Policy</Link>
             </div>
           </Reveal>
         </div>
