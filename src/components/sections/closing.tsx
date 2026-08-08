@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, ArrowRight, Minus, Plus, Star, ShieldCheck, Award } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -255,27 +257,18 @@ const contactSchema = z.object({
 
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsed = contactSchema.safeParse(form);
-    if (!parsed.success) {
-      const next: Record<string, string> = {};
-      parsed.error.issues.forEach((iss) => {
-        const key = String(iss.path[0]);
-        if (!next[key]) next[key] = iss.message;
-      });
-      setErrors(next);
-      return;
-    }
-    setErrors({});
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: "", email: "", message: "" }
+  });
+
+  const onSubmit = async (data: any) => {
     setSending(true);
     await new Promise((r) => setTimeout(r, 900));
     setSending(false);
-    setForm({ name: "", email: "", message: "" });
+    reset();
     toast.success("Message received", { description: "We usually reply within a day." });
   };
 
@@ -342,29 +335,26 @@ export function FaqSection() {
             <h3 className="font-display text-[clamp(2rem,3.6vw,2.8rem)] leading-tight text-forest-deep">
               Still wondering? <br/><span className="text-forest">Write to us.</span>
             </h3>
-            <form onSubmit={submit} noValidate className="mt-10 space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-10 space-y-8">
               <Field
                 id="c-name"
                 label="Your name"
-                value={form.name}
-                error={errors["name"]}
-                onChange={(v) => setForm({ ...form, name: v })}
+                error={errors.name?.message as string}
+                register={register("name")}
               />
               <Field
                 id="c-email"
                 label="Email address"
                 type="email"
-                value={form.email}
-                error={errors["email"]}
-                onChange={(v) => setForm({ ...form, email: v })}
+                error={errors.email?.message as string}
+                register={register("email")}
               />
               <Field
                 id="c-message"
                 label="Your message"
                 textarea
-                value={form.message}
-                error={errors["message"]}
-                onChange={(v) => setForm({ ...form, message: v })}
+                error={errors.message?.message as string}
+                register={register("message")}
               />
               <button
                 type="submit"
@@ -385,43 +375,35 @@ export function FaqSection() {
 export function Field({
   id,
   label,
-  value,
-  onChange,
   error,
   type = "text",
   textarea,
   autoComplete,
+  register,
 }: {
   id: string;
   label: string;
-  value: string;
-  onChange: (v: string) => void;
   error?: string | undefined;
   type?: string;
   textarea?: boolean;
   autoComplete?: string;
+  register?: any;
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [focused, setFocused] = useState(false);
   const shared = {
     id,
-    value,
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      onChange(e.target.value),
-    onFocus: () => setFocused(true),
-    onBlur: () => setFocused(false),
+    ...register,
     "aria-invalid": !!error,
     "aria-describedby": error ? `${id}-error` : undefined,
     className:
-      "w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40 transition-colors",
+      "peer w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40 transition-colors",
   };
 
   return (
-    <div ref={ref}>
+    <div>
       <label htmlFor={id} className="text-sm font-medium tracking-wide text-forest-deep uppercase">
         {label}
       </label>
-      <div className="relative mt-2">
+      <div className="relative mt-2 group">
         {textarea ? (
           <textarea {...shared} rows={4} className={shared.className + " resize-none"} placeholder="How can we help you?" />
         ) : (
@@ -429,8 +411,7 @@ export function Field({
         )}
         <span className="block h-[2px] w-full bg-line/80 rounded-full" />
         <span
-          className="absolute bottom-0 left-0 h-[2px] w-full origin-left bg-forest rounded-full transition-transform duration-[600ms] ease-out"
-          style={{ transform: `scaleX(${focused || value ? 1 : 0})` }}
+          className="absolute bottom-0 left-0 h-[2px] w-full origin-left bg-forest rounded-full transition-transform duration-[600ms] ease-out scale-x-0 peer-focus:scale-x-100"
         />
       </div>
       {error && (

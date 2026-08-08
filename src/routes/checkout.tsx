@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { getVariant, inr } from "@/lib/product";
@@ -39,48 +41,29 @@ const PAYMENTS = [
 function CheckoutPage() {
   const { lines, subtotal, discount, total, coupon, clear } = useCart();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    pin: "",
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [pay, setPay] = useState("upi");
   const [placing, setPlacing] = useState(false);
+
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { name: "", email: "", phone: "", address: "", city: "", state: "", pin: "" }
+  });
 
   const cod = pay === "cod" ? 49 : 0;
   const payable = total + cod;
 
-  const set = (k: keyof typeof form) => (v: string) => setForm(prev => ({ ...prev, [k]: v }));
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
     if (lines.length === 0) {
       toast.error("Your bag is empty.");
       return;
     }
-    const parsed = schema.safeParse(form);
-    if (!parsed.success) {
-      const next: Record<string, string> = {};
-      parsed.error.issues.forEach((iss) => {
-        const key = String(iss.path[0]);
-        if (!next[key]) next[key] = iss.message;
-      });
-      setErrors(next);
-      toast.error("Please check the highlighted fields.");
-      return;
-    }
-    setErrors({});
+    
     setPlacing(true);
     await new Promise((r) => setTimeout(r, 1400));
     const id = "DAG" + Math.floor(100000 + Math.random() * 899999);
     clear();
     setPlacing(false);
-    navigate({ to: "/order-confirmed", search: { id, name: form.name.split(" ")[0] ?? "" } });
+    navigate({ to: "/order-confirmed", search: { id, name: data.name.split(" ")[0] ?? "" } });
   };
 
   return (
@@ -93,20 +76,20 @@ function CheckoutPage() {
       </div>
 
       <div className="mt-12 grid gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-24">
-        <form onSubmit={submit} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <span className="eyebrow">Delivery address</span>
           <div className="mt-7 grid gap-7 sm:grid-cols-2">
-            <Field id="name" label="Full name" value={form.name} onChange={set("name")} error={errors["name"]} autoComplete="name" />
-            <Field id="phone" label="Mobile number" value={form.phone} onChange={set("phone")} error={errors["phone"]} autoComplete="tel" />
+            <Field id="name" label="Full name" register={register("name")} error={errors.name?.message as string} autoComplete="name" />
+            <Field id="phone" label="Mobile number" register={register("phone")} error={errors.phone?.message as string} autoComplete="tel" />
             <div className="sm:col-span-2">
-              <Field id="email" label="Email" type="email" value={form.email} onChange={set("email")} error={errors["email"]} autoComplete="email" />
+              <Field id="email" label="Email" type="email" register={register("email")} error={errors.email?.message as string} autoComplete="email" />
             </div>
             <div className="sm:col-span-2">
-              <Field id="address" label="Street address" value={form.address} onChange={set("address")} error={errors["address"]} autoComplete="street-address" />
+              <Field id="address" label="Street address" register={register("address")} error={errors.address?.message as string} autoComplete="street-address" />
             </div>
-            <Field id="city" label="City" value={form.city} onChange={set("city")} error={errors["city"]} autoComplete="address-level2" />
-            <Field id="state" label="State" value={form.state} onChange={set("state")} error={errors["state"]} autoComplete="address-level1" />
-            <Field id="pin" label="PIN code" value={form.pin} onChange={set("pin")} error={errors["pin"]} autoComplete="postal-code" />
+            <Field id="city" label="City" register={register("city")} error={errors.city?.message as string} autoComplete="address-level2" />
+            <Field id="state" label="State" register={register("state")} error={errors.state?.message as string} autoComplete="address-level1" />
+            <Field id="pin" label="PIN code" register={register("pin")} error={errors.pin?.message as string} autoComplete="postal-code" />
           </div>
 
           <div className="mt-14">

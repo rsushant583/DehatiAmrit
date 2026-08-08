@@ -130,11 +130,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <ScrollProgress />
         <div className="overflow-x-hidden w-full flex flex-col min-h-screen relative">
           <SiteHeader />
           <main id="main" className="flex-1 w-full">
-            <ScrollRestoration />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </main>
