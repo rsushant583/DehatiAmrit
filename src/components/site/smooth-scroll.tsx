@@ -3,6 +3,8 @@ import { useEffect } from "react";
 export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(max-width: 1024px)").matches || "ontouchstart" in window) return;
+    
     let lenis: { raf: (t: number) => void; destroy: () => void } | null = null;
     let raf = 0;
     let cancelled = false;
