@@ -210,7 +210,7 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
 
             <div className="mt-8">
               <span className="eyebrow text-forest-deep">Select your jar</span>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                 {VARIANTS.map((opt) => {
                   const on = opt.id === variant;
                   return (
@@ -219,18 +219,18 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                       onClick={() => setVariant(opt.id)}
                       aria-pressed={on}
                       className={cn(
-                        "group relative overflow-hidden rounded-xl border p-4 md:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center",
-                        on ? "border-forest bg-forest/5 shadow-md scale-[1.02] md:scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
+                        "group relative overflow-hidden rounded-xl border p-2.5 sm:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center",
+                        on ? "border-forest bg-forest/5 shadow-md scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
                       )}
                     >
-                      <span className="relative flex justify-between items-center w-full">
-                        <span className="block text-[15px] md:text-[16px] font-medium text-forest-deep">{SIZE_LABELS[opt.id] || opt.label}</span>
-                        {on && <Check className="h-4 w-4 text-forest shrink-0" />}
+                      <span className="relative flex justify-between items-start sm:items-center w-full">
+                        <span className="block text-[13px] sm:text-[16px] font-medium text-forest-deep leading-tight">{SIZE_LABELS[opt.id] || opt.label}</span>
+                        {on && <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-forest shrink-0 mt-0.5 sm:mt-0" />}
                       </span>
-                      <span className="relative mt-1 block text-[13px] md:text-sm text-muted-foreground">
+                      <span className="relative mt-1 block text-[11px] sm:text-sm text-muted-foreground leading-tight">
                         {opt.label} • {inr(opt.price)}
                       </span>
-                      <span className="relative mt-2 md:mt-3 block text-[10px] md:text-[11px] font-medium tracking-[0.18em] text-clay uppercase">
+                      <span className="relative mt-2 sm:mt-3 block text-[9px] sm:text-[11px] font-medium tracking-[0.15em] sm:tracking-[0.18em] text-clay uppercase">
                         {opt.note}
                       </span>
                     </button>
