@@ -130,7 +130,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <SmoothScroll />
         <ScrollProgress />
         <div className="overflow-x-hidden w-full flex flex-col min-h-screen relative">
           <SiteHeader />
