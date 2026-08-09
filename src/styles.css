@@ -5,6 +5,15 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
+ * Tailwind v4 gates hover/group-hover behind @media (hover: hover).
+ * That media query often fails on production (touch laptops, tablets,
+ * hybrid Chromebooks), so button wipe animations appear only on localhost.
+ * Restore classic :hover so premium CTA motion works everywhere a cursor can hover.
+ */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (&:is(:where(.group):hover *));
+
+/*
  * देहाती अमृत घी — design system
  * Palette: village cream paper, deep forest green ink, harvest gold.
  */
