@@ -116,6 +116,8 @@
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* clip avoids Chromium input/scrollIntoView freezes caused by overflow-x: hidden */
+    overflow-x: clip;
   }
 
   body {
@@ -123,11 +125,17 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
+    overflow-x: clip;
   }
 
   ::selection {
     background: var(--gold-soft);
     color: var(--forest-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
   }
 
   h1,

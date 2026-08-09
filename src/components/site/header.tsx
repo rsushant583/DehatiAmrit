@@ -50,7 +50,8 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = menu || search ? "hidden" : "";
+    // Use clip (not hidden) so search input focus/scrollIntoView cannot freeze Chromium.
+    document.body.style.overflow = menu || search ? "clip" : "";
     return () => {
       document.body.style.overflow = "";
     };
