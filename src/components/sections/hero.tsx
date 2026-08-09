@@ -42,18 +42,23 @@ export function Hero({ onBuy }: { onBuy: () => void }) {
           <Reveal variant="fade" delay={600}>
             <div className="mt-12 flex flex-col sm:flex-row items-center gap-4 w-full">
               <button
+                type="button"
                 onClick={onBuy}
-                className="group relative flex w-full sm:w-auto items-center justify-center overflow-hidden rounded-[20px] bg-forest-deep px-8 py-[18px] text-[12px] font-bold tracking-[0.15em] text-cream uppercase transition-[transform,background-color] duration-500 hover:bg-forest active:scale-95"
+                className="group relative flex w-full sm:w-auto items-center justify-center overflow-hidden rounded-[20px] bg-forest-deep px-8 py-[18px] text-[12px] font-bold tracking-[0.15em] text-cream uppercase transition-transform duration-500 hover:scale-[1.02] active:scale-95"
               >
-                Buy Fresh Batch
+                <span className="relative z-10">Buy Fresh Batch</span>
+                <span className="absolute inset-0 origin-bottom scale-y-0 bg-forest transition-transform duration-[700ms] [transition-timing-function:var(--ease-silk)] group-hover:scale-y-100" />
               </button>
-              
+
               <button
+                type="button"
                 onClick={() => document.getElementById("story")?.scrollIntoView({ behavior: "smooth" })}
-                className="group relative flex w-full sm:w-auto items-center justify-center overflow-hidden rounded-[20px] border border-forest-deep/20 bg-transparent px-8 py-[18px] text-[12px] font-bold tracking-[0.15em] text-forest-deep uppercase transition-all duration-[600ms] ease-out hover:border-forest-deep active:scale-95"
+                className="group relative flex w-full sm:w-auto items-center justify-center overflow-hidden rounded-[20px] border border-forest-deep/20 bg-transparent px-8 py-[18px] text-[12px] font-bold tracking-[0.15em] text-forest-deep uppercase transition-all duration-[600ms] ease-out hover:border-forest-deep hover:scale-[1.02] active:scale-95"
               >
-                <span className="absolute inset-0 translate-y-[101%] bg-forest-deep transition-transform duration-[600ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
-                <span className="relative z-10 transition-colors duration-[600ms] ease-out group-hover:text-cream">Explore Story</span> 
+                <span className="absolute inset-0 origin-bottom scale-y-0 bg-forest-deep transition-transform duration-[700ms] [transition-timing-function:var(--ease-silk)] group-hover:scale-y-100" />
+                <span className="relative z-10 transition-colors duration-[600ms] ease-out group-hover:text-cream">
+                  Explore Story
+                </span>
               </button>
             </div>
           </Reveal>

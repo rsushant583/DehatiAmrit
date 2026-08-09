@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Leaf, RotateCw, Flame, ShieldCheck, Award, Sun, Milk, MoonStar, Hand, TreePine, Wheat, Package, Home } from "lucide-react";
+import { Leaf, RotateCw, Flame, ShieldCheck, Award, Sun, Milk, MoonStar, Hand, Wheat, Package, Home } from "lucide-react";
 import { Reveal, RevealLines, useScrollProgress } from "@/components/site/reveal";
+import { cn } from "@/lib/utils";
 import villageImg from "@/assets/village.jpg";
 import craftImg from "@/assets/craft-churn.jpg";
 import pourImg from "@/assets/pour.jpg";
@@ -145,77 +146,227 @@ export function Craft() {
 /* ————————————————————— Journey ————————————————————— */
 
 const STEPS = [
-  { label: "Open Fields", icon: Sun, hint: "Where it begins" },
-  { label: "Morning Milking", icon: Milk, hint: "Fresh at dawn" },
-  { label: "Fresh A2 Milk", icon: Leaf, hint: "Pure & natural" },
-  { label: "Curd Overnight", icon: MoonStar, hint: "Slow culture" },
-  { label: "Hand Bilona", icon: Hand, hint: "Ancient method" },
-  { label: "Slow Wood Fire", icon: Flame, hint: "Patient simmer" },
-  { label: "Natural Grain", icon: Wheat, hint: "Golden texture" },
-  { label: "Glass Jar", icon: Package, hint: "Sealed fresh" },
-  { label: "Your Kitchen", icon: Home, hint: "Ready to serve" }
+  {
+    label: "Open Fields",
+    icon: Sun,
+    hint: "Where it begins",
+    desc: "Indigenous cows and buffaloes graze freely under open sky — the first promise of purity.",
+  },
+  {
+    label: "Morning Milking",
+    icon: Milk,
+    hint: "Fresh at dawn",
+    desc: "Only the morning’s freshest A2 milk is collected, still warm with the day’s first light.",
+  },
+  {
+    label: "Fresh A2 Milk",
+    icon: Leaf,
+    hint: "Pure & natural",
+    desc: "Rich, nutrient-dense milk — never skimmed, never hurried — becomes the heart of every jar.",
+  },
+  {
+    label: "Curd Overnight",
+    icon: MoonStar,
+    hint: "Slow culture",
+    desc: "Milk is set overnight into living curd. Patience begins the bilona tradition.",
+  },
+  {
+    label: "Hand Bilona",
+    icon: Hand,
+    hint: "Ancient method",
+    desc: "Wooden bilona churning by hand. Less yield, deeper essence — the Vedic way.",
+  },
+  {
+    label: "Slow Wood Fire",
+    icon: Flame,
+    hint: "Patient simmer",
+    desc: "Butter is simmered for hours over wood fire until it turns gold and fragrant.",
+  },
+  {
+    label: "Natural Grain",
+    icon: Wheat,
+    hint: "Golden texture",
+    desc: "A natural grain settles — the signature of slow-cooked ghee, never forced.",
+  },
+  {
+    label: "Glass Jar",
+    icon: Package,
+    hint: "Sealed fresh",
+    desc: "Sealed the day it is made, so the aroma arrives exactly as it left the kitchen.",
+  },
+  {
+    label: "Your Kitchen",
+    icon: Home,
+    hint: "Ready to serve",
+    desc: "From pasture to your plate — forty-eight hours of care, ready for every meal.",
+  },
 ];
 
 export function Journey() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const glowY = useTransform(scrollYProgress, [0, 1], ["10%", "70%"]);
+  const current = STEPS[active]!;
+  const Icon = current.icon;
+  const progress = ((active + 1) / STEPS.length) * 100;
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => {
+      setActive((i) => (i + 1) % STEPS.length);
+    }, 3800);
+    return () => clearInterval(t);
+  }, [paused]);
+
   return (
-    <section className="relative bg-forest-deep text-cream py-12 md:py-16 overflow-hidden">
-      {/* Subtle radial gold glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 80%, rgba(200,160,60,0.08) 0%, transparent 60%)' }} />
-      
-      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative z-10">
-        <div className="text-center mb-8 md:mb-12">
+    <section
+      ref={sectionRef}
+      className="relative bg-forest-deep text-cream py-16 md:py-24 overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <motion.div
+        className="pointer-events-none absolute left-1/2 h-[55vmin] w-[55vmin] -translate-x-1/2 rounded-full bg-gold/10 blur-[100px]"
+        style={{ top: glowY }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at center, transparent 40%, oklch(0.226 0.048 148) 100%), repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 48px, oklch(0.769 0.148 76 / 0.35) 49px, transparent 50px)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1400px] px-5 md:px-10">
+        <div className="text-center">
           <span className="eyebrow text-gold tracking-[0.3em]">03 — The Journey</span>
-          <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] text-cream leading-tight">From Pasture to Your Plate</h2>
-          <p className="mt-3 text-cream/50 text-sm tracking-wide">9 steps · 48 hours · One tradition</p>
+          <h2 className="mt-4 font-display text-[clamp(2.2rem,5vw,3.8rem)] leading-tight text-cream">
+            From Pasture to Your Plate
+          </h2>
+          <p className="mt-3 text-sm tracking-wide text-cream/50">9 steps · 48 hours · One tradition</p>
         </div>
 
-        {/* Desktop: Horizontal scrollable timeline */}
-        <div className="hidden md:block overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
-          <div className="flex items-start gap-0 min-w-max mx-auto justify-center">
-            {STEPS.map((step, i) => (
-              <div key={step.label} className="flex items-start">
-                {/* Step node */}
-                <div className="group flex flex-col items-center w-[130px] cursor-default">
-                  {/* Icon circle */}
-                  <div className="relative w-14 h-14 rounded-full border border-gold/30 bg-forest-deep flex items-center justify-center transition-all duration-700 group-hover:border-gold group-hover:bg-gold/10 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-gold/20">
-                    <step.icon className="w-5 h-5 text-gold/70 transition-colors duration-500 group-hover:text-gold" strokeWidth={1.5} />
-                  </div>
-                  {/* Step number */}
-                  <span className="mt-3 text-[10px] tracking-[0.25em] text-gold/40 font-medium uppercase">Step {String(i + 1).padStart(2, '0')}</span>
-                  {/* Step label */}
-                  <span className="mt-1.5 font-display text-[15px] text-cream/90 text-center leading-tight transition-colors duration-500 group-hover:text-gold">{step.label}</span>
-                  {/* Hint */}
-                  <span className="mt-1 text-[11px] text-cream/30 transition-colors duration-500 group-hover:text-cream/60">{step.hint}</span>
-                </div>
-                {/* Connector line */}
-                {i < STEPS.length - 1 && (
-                  <div className="flex items-center mt-7 -mx-1">
-                    <div className="w-8 h-px bg-gradient-to-r from-gold/40 to-gold/20" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-gold/30 shrink-0" />
-                    <div className="w-8 h-px bg-gradient-to-r from-gold/20 to-gold/40" />
-                  </div>
-                )}
-              </div>
-            ))}
+        {/* Desktop: featured step + interactive rail */}
+        <div className="mt-14 hidden md:block">
+          <div className="mx-auto grid max-w-4xl grid-cols-[auto_1fr] items-center gap-10 lg:gap-14">
+            <div className="relative grid h-36 w-36 place-items-center lg:h-44 lg:w-44">
+              <div className="absolute inset-0 rounded-full border border-gold/20" />
+              <div className="absolute inset-3 rounded-full border border-gold/35" />
+              <motion.div
+                key={current.label}
+                initial={{ opacity: 0, scale: 0.82, rotate: -8 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="grid h-24 w-24 place-items-center rounded-full bg-gold/10 shadow-[0_0_60px_-12px_oklch(0.769_0.148_76/0.55)] lg:h-28 lg:w-28"
+              >
+                <Icon className="h-10 w-10 text-gold lg:h-12 lg:w-12" strokeWidth={1.25} />
+              </motion.div>
+            </div>
+
+            <div className="min-h-[9.5rem]">
+              <motion.div
+                key={`copy-${current.label}`}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <span className="text-[11px] font-medium tracking-[0.35em] text-gold uppercase">
+                  Step {String(active + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-3 font-display text-[clamp(2rem,3.5vw,3rem)] text-cream leading-none">
+                  {current.label}
+                </h3>
+                <p className="mt-2 text-sm tracking-[0.2em] text-gold/70 uppercase">{current.hint}</p>
+                <p className="mt-4 max-w-[42ch] text-[16px] leading-relaxed text-cream/65">{current.desc}</p>
+              </motion.div>
+            </div>
+          </div>
+
+          <div className="relative mx-auto mt-14 max-w-5xl px-2">
+            <div className="absolute left-[5%] right-[5%] top-[27px] h-px bg-gold/15" aria-hidden />
+            <motion.div
+              className="absolute left-[5%] top-[27px] h-px origin-left bg-gradient-to-r from-gold/80 via-gold to-gold/40"
+              style={{ width: "90%" }}
+              animate={{ scaleX: progress / 100 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden
+            />
+            <div className="relative flex justify-between gap-1">
+              {STEPS.map((step, i) => {
+                const StepIcon = step.icon;
+                const on = i === active;
+                const done = i < active;
+                return (
+                  <button
+                    key={step.label}
+                    type="button"
+                    onClick={() => setActive(i)}
+                    onMouseEnter={() => setActive(i)}
+                    className="group flex w-[72px] flex-col items-center text-center lg:w-[84px]"
+                    aria-current={on}
+                  >
+                    <span
+                      className={cn(
+                        "grid h-14 w-14 place-items-center rounded-full border transition-all duration-500 [transition-timing-function:var(--ease-silk)]",
+                        on
+                          ? "scale-110 border-gold bg-gold/15 text-gold shadow-[0_0_28px_-8px_oklch(0.769_0.148_76/0.7)]"
+                          : done
+                            ? "border-gold/50 bg-gold/5 text-gold/80"
+                            : "border-gold/25 bg-forest-deep text-gold/45 group-hover:border-gold/55 group-hover:text-gold",
+                      )}
+                    >
+                      <StepIcon className="h-5 w-5" strokeWidth={1.5} />
+                    </span>
+                    <span
+                      className={cn(
+                        "mt-3 font-display text-[12px] leading-tight transition-colors duration-500 lg:text-[13px]",
+                        on ? "text-gold" : "text-cream/55 group-hover:text-cream/85",
+                      )}
+                    >
+                      {step.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Mobile: 3-column compact grid */}
-        <div className="md:hidden grid grid-cols-3 gap-6">
-          {STEPS.map((step, i) => (
-            <div key={step.label} className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full border border-gold/25 bg-forest-deep/80 flex items-center justify-center">
-                <step.icon className="w-4 h-4 text-gold/70" strokeWidth={1.5} />
-              </div>
-              <span className="mt-2 text-[10px] tracking-[0.2em] text-gold/40">{String(i + 1).padStart(2, '0')}</span>
-              <span className="mt-1 font-display text-[13px] text-cream/90 leading-tight">{step.label}</span>
-            </div>
-          ))}
-        </div>
+        {/* Mobile: cinematic vertical timeline */}
+        <ol className="relative mt-12 space-y-0 md:hidden">
+          <div
+            className="absolute bottom-4 left-[23px] top-4 w-px bg-gradient-to-b from-gold/50 via-gold/25 to-transparent"
+            aria-hidden
+          />
+          {STEPS.map((step, i) => {
+            const StepIcon = step.icon;
+            return (
+              <Reveal key={step.label} variant="fade" delay={Math.min(i * 70, 280)} className="relative pl-16 pb-10 last:pb-0">
+                <span className="absolute left-0 top-0 grid h-12 w-12 place-items-center rounded-full border border-gold/40 bg-forest-deep text-gold shadow-[0_0_24px_-10px_oklch(0.769_0.148_76/0.8)]">
+                  <StepIcon className="h-5 w-5" strokeWidth={1.5} />
+                </span>
+                <span className="text-[10px] font-medium tracking-[0.28em] text-gold/70 uppercase">
+                  Step {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-1.5 font-display text-2xl text-cream">{step.label}</h3>
+                <p className="mt-1 text-[12px] tracking-[0.18em] text-gold/55 uppercase">{step.hint}</p>
+                <p className="mt-2 text-[14px] leading-relaxed text-cream/60">{step.desc}</p>
+              </Reveal>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );
 }
+
 
 /* ————————————————————— WhyUs -> Why Dehati Amrit ————————————————————— */
 

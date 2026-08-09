@@ -1,6 +1,6 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent, type TouchEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { Check, Heart, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
@@ -39,12 +39,20 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
   const [qty, setQty] = useState(1);
   const [index, setIndex] = useState(0);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
+  const [direction, setDirection] = useState(0);
   const imgWrap = useRef<HTMLDivElement | null>(null);
+  const touchX = useRef<number | null>(null);
   const navigate = useNavigate();
   const { add, setOpen, wishlist, toggleWishlist } = useCart();
 
   const v = useMemo(() => getVariant(variant), [variant]);
   const wished = wishlist.includes(variant);
+
+  const selectImage = useCallback((next: number) => {
+    setDirection(next > index ? 1 : -1);
+    setIndex(next);
+    setZoom(null);
+  }, [index]);
 
   const addToCart = useCallback(() => {
     add(variant, qty);
@@ -61,10 +69,25 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
     document.getElementById("product")?.scrollIntoView({ behavior: "smooth" });
   });
 
-  const onMove = (e: React.MouseEvent) => {
+  const onMove = (e: MouseEvent) => {
     const r = imgWrap.current?.getBoundingClientRect();
     if (!r) return;
     setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+  };
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchX.current = e.changedTouches[0]?.clientX ?? null;
+  };
+
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = touchX.current;
+    const end = e.changedTouches[0]?.clientX;
+    touchX.current = null;
+    if (start == null || end == null) return;
+    const delta = end - start;
+    if (Math.abs(delta) < 48) return;
+    if (delta < 0 && index < GALLERY.length - 1) selectImage(index + 1);
+    if (delta > 0 && index > 0) selectImage(index - 1);
   };
 
   const current = GALLERY[index] ?? GALLERY[0]!;
@@ -72,13 +95,25 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
   });
 
-  const jarRotate = useTransform(scrollYProgress, [0, 1], [-3, 8]);
-  const lightShiftX = useTransform(scrollYProgress, [0, 1], ["-50%", "150%"]);
-  const breathingScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.03, 1]);
-  const steamY = useTransform(scrollYProgress, [0, 1], [20, -40]);
+  // Atmospheric layers only — never applied to the zoomable image (avoids fighting hover zoom).
+  const lightShiftX = useTransform(scrollYProgress, [0, 1], ["-40%", "140%"]);
+  const steamY = useTransform(scrollYProgress, [0, 1], [16, -28]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (!inView) return;
+      if (e.key === "ArrowRight" && index < GALLERY.length - 1) selectImage(index + 1);
+      if (e.key === "ArrowLeft" && index > 0) selectImage(index - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index, selectImage]);
 
   return (
     <section id="product" className="relative bg-paper py-12 md:py-16">
@@ -90,59 +125,59 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
 
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16" ref={sectionRef}>
           {/* Gallery */}
-          <div className="relative group perspective-[1000px]">
-            <Reveal variant="image" className="relative aspect-[3/4] w-full rounded-2xl bg-cream shadow-2xl overflow-hidden transition-all duration-700 hover:shadow-3xl">
-              {/* Dynamic Scrolling Light/Reflection */}
-              <motion.div 
-                className="absolute inset-0 pointer-events-none z-10 mix-blend-overlay opacity-60"
-                style={{ 
-                  background: "linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.8) 40%, rgba(255,255,255,0.8) 60%, transparent 80%)",
+          <div className="relative">
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-cream shadow-2xl">
+              <motion.div
+                className="pointer-events-none absolute inset-0 z-10 mix-blend-overlay opacity-50"
+                style={{
+                  background:
+                    "linear-gradient(110deg, transparent 18%, rgba(255,255,255,0.75) 42%, rgba(255,255,255,0.75) 58%, transparent 82%)",
                   x: lightShiftX,
-                  scale: 2
+                  scale: 2,
                 }}
+                aria-hidden
               />
-              {/* Scroll-driven Steam Effect */}
-              <motion.div 
-                className="absolute -top-10 left-1/4 w-64 h-64 bg-white/20 blur-[80px] rounded-full pointer-events-none z-10"
+              <motion.div
+                className="pointer-events-none absolute -top-10 left-1/4 z-10 h-56 w-56 rounded-full bg-white/25 blur-[70px]"
                 style={{ y: steamY }}
-                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ scale: [1, 1.08, 1], opacity: [0.28, 0.5, 0.28] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden
               />
 
-              <motion.div
-                style={{ rotateZ: jarRotate, scale: breathingScale }}
-                className="h-full w-full origin-bottom"
-              >
-                <div
+              <div
                 ref={imgWrap}
                 onMouseMove={onMove}
                 onMouseLeave={() => setZoom(null)}
-                className="h-full w-full cursor-zoom-in overflow-hidden relative z-0"
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
+                className="relative z-0 h-full w-full cursor-zoom-in overflow-hidden touch-pan-y"
               >
-                {GALLERY.map((g, i) => (
-                  <img
-                    key={g.src}
-                    src={g.src}
-                    alt={g.alt}
-                    width={1200}
-                    height={1500}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[1100ms] [transition-timing-function:var(--ease-silk)]"
-                    style={{
-                      opacity: index === i ? 1 : 0,
-                      transform:
-                        index === i && zoom
-                          ? "scale(1.8)"
-                          : index === i
-                            ? "scale(1)"
-                            : "scale(1.05)",
-                      transformOrigin: zoom ? `${zoom.x}% ${zoom.y}%` : "center",
-                      filter: index === i ? "blur(0px)" : "blur(4px)",
-                    }}
-                  />
-                ))}
+                <AnimatePresence initial={false} mode="wait">
+                  <motion.div
+                    key={current.src}
+                    initial={{ opacity: 0, x: direction >= 0 ? 28 : -28 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: direction >= 0 ? -18 : 18 }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0"
+                  >
+                    <img
+                      src={current.src}
+                      alt={current.alt}
+                      width={1200}
+                      height={1500}
+                      draggable={false}
+                      className="h-full w-full object-cover will-change-transform transition-transform duration-200 ease-out"
+                      style={{
+                        transform: zoom ? "scale(1.75)" : "scale(1)",
+                        transformOrigin: zoom ? `${zoom.x}% ${zoom.y}%` : "50% 50%",
+                      }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
-              </motion.div>
+
               <button
                 type="button"
                 aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
@@ -151,40 +186,62 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                   toggleWishlist(variant);
                   toast(wished ? "Removed from wishlist" : "Saved to your wishlist");
                 }}
-                className="absolute right-6 top-6 z-20 grid h-12 w-12 place-items-center rounded-full bg-paper/85 backdrop-blur-md transition-colors duration-500 hover:bg-paper shadow-sm"
+                className="absolute right-5 top-5 z-20 grid h-12 w-12 place-items-center rounded-full bg-paper/85 backdrop-blur-md shadow-sm transition-[transform,background-color] duration-500 hover:scale-105 hover:bg-paper active:scale-95"
               >
                 <Heart
-                  className={cn("h-5 w-5 transition-colors", wished ? "fill-clay text-clay" : "text-forest")}
+                  className={cn(
+                    "h-5 w-5 transition-all duration-500",
+                    wished ? "fill-clay text-clay scale-110" : "text-forest scale-100",
+                  )}
                   strokeWidth={1.5}
                 />
               </button>
-            </Reveal>
 
-            <div className="mt-4 sm:mt-6 flex justify-center gap-2 sm:gap-4">
-              {GALLERY.map((g, i) => (
-                <button
-                  key={g.src}
-                  onClick={() => setIndex(i)}
-                  aria-label={`View image ${i + 1}`}
-                  aria-current={index === i}
-                  className={cn(
-                    "aspect-square w-16 sm:w-20 overflow-hidden rounded-md transition-all duration-500 outline outline-2 outline-offset-2 shrink-0",
-                    index === i ? "opacity-100 outline-forest shadow-md" : "opacity-60 outline-transparent hover:opacity-100",
-                  )}
-                >
-                  <img
-                    src={g.src}
-                    alt=""
-                    width={200}
-                    height={200}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                  />
-                </button>
-              ))}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-forest-deep/35 to-transparent px-5 pb-5 pt-16 md:hidden">
+                <p className="text-[11px] tracking-[0.16em] text-cream/90 uppercase">Swipe to explore</p>
+              </div>
             </div>
-            <p className="mt-6 text-center text-[11px] tracking-[0.18em] text-muted-foreground uppercase">
-              Hover to zoom · {current.alt}
+
+            <div className="mt-5 flex justify-center gap-3 sm:mt-6 sm:gap-4">
+              {GALLERY.map((g, i) => {
+                const on = index === i;
+                return (
+                  <button
+                    key={g.src}
+                    type="button"
+                    onClick={() => selectImage(i)}
+                    aria-label={`View image ${i + 1}`}
+                    aria-current={on ? "true" : undefined}
+                    className={cn(
+                      "group relative aspect-square w-16 shrink-0 overflow-hidden rounded-md transition-transform duration-500 sm:w-20",
+                      on ? "scale-105" : "hover:scale-[1.03]",
+                    )}
+                  >
+                    <img
+                      src={g.src}
+                      alt=""
+                      width={200}
+                      height={200}
+                      loading="lazy"
+                      className={cn(
+                        "h-full w-full object-cover transition-[opacity,transform] duration-500",
+                        on ? "opacity-100" : "opacity-55 group-hover:opacity-90",
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "absolute inset-0 rounded-md outline outline-2 outline-offset-2 transition-colors duration-500",
+                        on ? "outline-forest" : "outline-transparent",
+                      )}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-5 text-center text-[11px] tracking-[0.18em] text-muted-foreground uppercase">
+              <span className="hidden md:inline">Hover to zoom · </span>
+              <span className="md:hidden">Swipe · </span>
+              {current.alt}
             </p>
           </div>
 
@@ -245,13 +302,21 @@ export function ProductSection({ registerBuy }: { registerBuy?: (fn: () => void)
                   return (
                     <button
                       key={opt.id}
+                      type="button"
                       onClick={() => setVariant(opt.id)}
                       aria-pressed={on}
                       className={cn(
-                        "group relative overflow-hidden rounded-xl border p-2.5 sm:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center min-w-0",
+                        "group relative overflow-hidden rounded-xl border p-2.5 sm:p-3.5 text-left transition-all duration-[600ms] [transition-timing-function:var(--ease-silk)] shadow-sm flex flex-col justify-center min-w-0 hover:scale-[1.01]",
                         on ? "border-forest bg-forest/5 shadow-md scale-[1.02]" : "border-line hover:border-forest/40 hover:shadow-md bg-transparent",
                       )}
                     >
+                      <span
+                        className={cn(
+                          "pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-forest/[0.06] transition-transform duration-[650ms] [transition-timing-function:var(--ease-silk)]",
+                          on ? "scale-y-100" : "group-hover:scale-y-100",
+                        )}
+                        aria-hidden
+                      />
                       <span className="relative flex justify-between items-start sm:items-center w-full gap-1">
                         <span className="block text-[13px] sm:text-[16px] font-medium text-forest-deep leading-tight truncate">{SIZE_LABELS[opt.id] || opt.label}</span>
                         {on && <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-forest shrink-0 mt-0.5 sm:mt-0" />}
