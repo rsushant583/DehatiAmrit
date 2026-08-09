@@ -395,7 +395,7 @@ export function Field({
     "aria-invalid": !!error,
     "aria-describedby": error ? `${id}-error` : undefined,
     className:
-      "w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40 transition-colors",
+      "w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40",
   };
 
   return (
@@ -403,16 +403,13 @@ export function Field({
       <label htmlFor={id} className="text-sm font-medium tracking-wide text-forest-deep uppercase">
         {label}
       </label>
-      <div className="relative mt-2 group">
+      <div className="relative mt-2">
         {textarea ? (
           <textarea {...shared} rows={4} className={shared.className + " resize-none"} placeholder="How can we help you?" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore="true" />
         ) : (
           <input {...shared} type={type} autoComplete={autoComplete} placeholder={type === 'email' ? 'you@example.com' : 'John Doe'} data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore="true" />
         )}
         <span className="block h-[2px] w-full bg-line/80 rounded-full" />
-        <span
-          className="absolute bottom-0 left-0 h-[2px] w-full origin-left bg-forest rounded-full transition-transform duration-[600ms] ease-out scale-x-0 group-focus-within:scale-x-100"
-        />
       </div>
       {error && (
         <p id={`${id}-error`} role="alert" className="mt-2 text-xs font-medium text-red-500">

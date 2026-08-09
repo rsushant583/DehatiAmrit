@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, Search, ShoppingBag, ShoppingCart, X, Home, Heart, User } from "lucide-react";
 import { toast } from "sonner";
@@ -264,7 +264,7 @@ export function SiteHeader() {
   );
 }
 
-function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
+const SearchOverlay = React.memo(({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [q, setQ] = useState("");
   const pool = [
     ...VARIANTS.map((v) => ({ title: `Dehati Amrit Ghee — ${v.label}`, kind: "Product", hash: "product" })),
@@ -323,4 +323,4 @@ function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }
       </div>
     </div>
   );
-}
+});
