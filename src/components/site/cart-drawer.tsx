@@ -10,7 +10,7 @@ export function CartDrawer() {
   const { open, setOpen, lines, setQty, remove, subtotal, mrpTotal, hydrated } = useCart();
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.overflow = open ? "clip" : "";
     return () => {
       document.body.style.overflow = "";
     };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FocusEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, ArrowRight, Minus, Plus, Star, ShieldCheck, Award } from "lucide-react";
@@ -389,13 +389,28 @@ export function Field({
   autoComplete?: string;
   register?: any;
 }) {
+  // Local focus/fill state for underline motion — avoid peer-focus / :focus-within
+  // CSS (those selectors previously triggered Chromium style storms on keypress).
+  const [active, setActive] = useState(false);
+  const { onBlur: registerOnBlur, onChange: registerOnChange, ...registerRest } = register ?? {};
+
   const shared = {
     id,
-    ...register,
+    ...registerRest,
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      registerOnChange?.(e);
+      // Keep underline while focused; after blur use filled state only.
+      setActive(true);
+    },
+    onFocus: () => setActive(true),
+    onBlur: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setActive(!!e.target.value);
+      registerOnBlur?.(e);
+    },
     "aria-invalid": !!error,
     "aria-describedby": error ? `${id}-error` : undefined,
     className:
-      "w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40",
+      "w-full bg-transparent py-3 text-[16px] text-forest-deep outline-none placeholder:text-muted-foreground/40 transition-colors duration-300",
   };
 
   return (
@@ -405,11 +420,36 @@ export function Field({
       </label>
       <div className="relative mt-2">
         {textarea ? (
-          <textarea {...shared} rows={4} className={shared.className + " resize-none"} placeholder="How can we help you?" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore="true" />
+          <textarea
+            {...shared}
+            rows={4}
+            className={shared.className + " resize-none"}
+            placeholder="How can we help you?"
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
+            data-lpignore="true"
+            data-1p-ignore="true"
+          />
         ) : (
-          <input {...shared} type={type} autoComplete={autoComplete} placeholder={type === 'email' ? 'you@example.com' : 'John Doe'} data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lpignore="true" data-1p-ignore="true" />
+          <input
+            {...shared}
+            type={type}
+            autoComplete={autoComplete}
+            placeholder={type === "email" ? "you@example.com" : "John Doe"}
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
+            data-lpignore="true"
+            data-1p-ignore="true"
+          />
         )}
         <span className="block h-[2px] w-full bg-line/80 rounded-full" />
+        <span
+          className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full origin-left bg-forest rounded-full transition-transform duration-[600ms] ease-out"
+          style={{ transform: `scaleX(${active ? 1 : 0})` }}
+          aria-hidden
+        />
       </div>
       {error && (
         <p id={`${id}-error`} role="alert" className="mt-2 text-xs font-medium text-red-500">
